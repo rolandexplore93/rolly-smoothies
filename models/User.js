@@ -17,6 +17,20 @@ const userSchema = new Schema({
     }
 }, { timestamps: true })
 
+// fire a function after a document has been saved to the database
+// Test with POSTMAN
+// userSchema.post('save', function(doc, next){
+//     console.log("New user saved to the database");
+//     next()
+// })
+
+// fire a function before a document is save to the database
+userSchema.pre('save', function(next){
+    console.log("User is about to be created and saved to the database", this);
+    next()
+})
+
+
 // Create a user model based on the schema
 const User = mongoose.model('user', userSchema)
 
