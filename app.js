@@ -32,24 +32,24 @@ app.get('/smoothies', (req, res) => {res.render('smoothies')})
 app.use('/', authRoutes)
 
 // cookies
-app.get('/set-cookies', (req, res) => {
-    // Basic approach to set cookies
-    // res.setHeader('Set-Cookie', 'newUser: true');
-    // res.send("Cookie received")
+// app.get('/set-cookies', (req, res) => {
+//     // Basic approach to set cookies
+//     // res.setHeader('Set-Cookie', 'newUser: true');
+//     // res.send("Cookie received")
 
-    // Using a 3rd party package cookie-parser
-    res.cookie('newUser', false);
-    res.cookie('isEmployee', true, {
-        maxAge: 1000 * 60 * 60 * 24,
-        httpOnly: true 
-     })
+//     // Using a 3rd party package cookie-parser
+//     res.cookie('newUser', false);
+//     res.cookie('isEmployee', true, {
+//         maxAge: 1000 * 60 * 60 * 24,
+//         httpOnly: true 
+//      })
 
-    res.send("Cookie received");
-})
+//     res.send("Cookie received");
+// })
 
-app.get('/read-cookies', (req, res) => {
-    const cookies = req.cookies
-    console.log(cookies)
+// app.get('/read-cookies', (req, res) => {
+//     const cookies = req.cookies
+//     console.log(cookies)
 
-    res.json(cookies)
-})
+//     res.json(cookies)
+// })
