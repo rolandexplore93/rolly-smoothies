@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoutes');
+const cookieParser = require('cookie-parser')
 
 // Configure the environment variable to hide api keys from public
 const dotenv = require('dotenv');
@@ -12,6 +13,7 @@ const app = express()
 // apply middleware
 app.use(express.static('public'))
 app.use(express.json())
+app.use(cookieParser())
 
 // ejs view engine
 app.set('view engine', 'ejs');
@@ -28,3 +30,26 @@ mongoose.connect(databaseAPI)
 app.get('/', (req, res) => {res.render('home', { title: "Smoothies"})})
 app.get('/smoothies', (req, res) => {res.render('smoothies')})
 app.use('/', authRoutes)
+
+// cookies
+app.get('/set-cookies', (req, res) => {
+    // Basic approach to set cookies
+    // res.setHeader('Set-Cookie', 'newUser: true');
+    // res.send("Cookie received")
+
+    // Using a 3rd party package cookie-parser
+    res.cookie('newUser', false);
+    res.cookie('isEmployee', true, {
+        maxAge: 1000 * 60 * 60 * 24,
+        httpOnly: true 
+     })
+
+    res.send("Cookie received");
+})
+
+app.get('/read-cookies', (req, res) => {
+    const cookies = req.cookies
+    console.log(cookies)
+
+    res.json(cookies)
+})
