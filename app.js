@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoutes');
 const cookieParser = require('cookie-parser')
+const { requireAuth } = require('./middleware/authMiddleware');
 
 // Configure the environment variable to hide api keys from public
 const dotenv = require('dotenv');
@@ -28,8 +29,8 @@ mongoose.connect(databaseAPI)
 
 // routes
 app.get('/', (req, res) => {res.render('home', { title: "Smoothies"})})
-app.get('/smoothies', (req, res) => {res.render('smoothies')})
-app.use('/', authRoutes)
+app.get('/smoothies', requireAuth, (req, res) => {res.render('smoothies')})
+app.use('/', authRoutes);
 
 // cookies
 // app.get('/set-cookies', (req, res) => {
