@@ -2,8 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoutes');
 const cookieParser = require('cookie-parser')
-const { requireAuth } = require('./middleware/authMiddleware');
-
+const { requireAuth, checkUser } = require('./middleware/authMiddleware');
 // Configure the environment variable to hide api keys from public
 const dotenv = require('dotenv');
 dotenv.config();
@@ -28,6 +27,7 @@ mongoose.connect(databaseAPI)
     .catch(err => console.log(err));
 
 // routes
+app.get('*', checkUser)  //apply MW to every single get request
 app.get('/', (req, res) => {res.render('home', { title: "Smoothies"})})
 app.get('/smoothies', requireAuth, (req, res) => {res.render('smoothies')})
 app.use('/', authRoutes);
