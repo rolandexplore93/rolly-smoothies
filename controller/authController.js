@@ -7,6 +7,16 @@ const handleErrors = (err => {
     console.log(err.message, err.code);
     let errors = { email: '', password: ''}
 
+    // incorrect email address
+    if (err.message === 'Email not found! Please, sign up'){
+        errors.email = 'Email not found! Please, sign up...'
+    }
+
+    // incorrect email address
+    if (err.message === 'Password is not correct'){
+        errors.password = 'Password is not correct...'
+    }
+
     // duplicate error code
     if (err.code === 11000){
         errors.email = "Email already exist in our database";
@@ -63,6 +73,17 @@ module.exports.signup_post = async (req, res) => {
 
 module.exports.login_post = async (req, res) => {
     const {email, password} = req.body;
-    console.log(email, password)
-    res.send('user sign in')
+    // console.log(email, password)
+    
+    try{
+        const user = await User.login(email, password);
+        // create a jwt
+        const token = createToken(user._id);
+        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000});
+        res.status(200).json({ user: user._id});
+    }
+    catch(err){
+        const error = handleErrors(err)
+        res.status(400).json({error});
+    }
 }
