@@ -7,12 +7,12 @@ const requireAuth = (req, res, next) => {
     // check if the token exists
     if (token){
         // verify the token
-        jwt.verify(token, "rollyJS secret", (err, decoded) => {
+        jwt.verify(token, "rollyJS secret", (err, decodedToken) => {
             if (err){
                 console.log(err.message);
                 res.redirect('/')
             } else {
-                console.log(decoded);
+                console.log(decodedToken);
                 next()
             }
         })
@@ -42,6 +42,7 @@ const checkUser = (req, res, next) => {
         })
     } else {
         res.locals.user = null;
+        next();
     }
 }
 
